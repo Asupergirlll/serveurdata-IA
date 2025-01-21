@@ -1,7 +1,10 @@
+version: '3'
 services:
   web:
-    build: templates
-    command: python app.py
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
-    restart: always
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
