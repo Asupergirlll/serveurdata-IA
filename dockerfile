@@ -6,4 +6,4 @@ RUN apt-get install -y libgl1-mesa-dev
 COPY requirements .
 RUN pip install -r requirements
 COPY . .
-CMD ["python3", "app.py
+CMD ["python3", "app.py"]
