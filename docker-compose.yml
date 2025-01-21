@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    build: .
+    build: templates
     command: python app.py
     ports:
       - "80:80"
