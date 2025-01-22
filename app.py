@@ -38,7 +38,6 @@ def login():
 
 # Route principale pour afficher le formulaire
 @app.route("/", methods=['GET'])
-@jwt_required()
 def index():
     return render_template("index.html")
 
