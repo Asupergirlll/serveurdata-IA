@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, jsonify
+from  flask_jwt_extended import JWTManager, jwt_required
 
 app = Flask(__name__)
+
+app.config['JWT_SECRET_KEY'] = 'dataia'
+
+jwt = JWTManager(app)
 
 # Liste des livres
 books = [
@@ -19,6 +24,7 @@ users = {
 
 # Route de connexion
 @app.route("/login", methods=['POST'])
+@jwt_required()
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -32,12 +38,14 @@ def login():
 
 # Route principale pour afficher le formulaire
 @app.route("/", methods=['GET'])
+@jwt_required()
 def index():
     return render_template("index.html")
 
 
 # API pour rechercher des livres par auteur
 @app.route("/search", methods=['GET'])
+@jwt_required()
 def search():
     author_query = request.args.get('author', '').strip().lower()
     if not author_query:
@@ -54,6 +62,7 @@ def search():
 
 # API pour ajouter un livre
 @app.route("/add_book", methods=['POST'])
+@jwt_required()
 def add_book():
     # Récupérer les données envoyées dans la requête
     title = request.form.get('title')
