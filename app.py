@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 
 app = Flask(__name__)
 
@@ -23,21 +23,15 @@ users = {
 }
 
 # Route de connexion
-@app.route('/secure-page', methods=['GET'])
-@jwt_required()
-def secure_page():
-    current_user = get_jwt_identity()
-    return jsonify({"msg": f"Bienvenue {current_user}, vous avez accès à cette page sécurisée."})
-
 @app.route("/login", methods=['POST'])
-@jwt_required()
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
 
     # Vérification des identifiants
     if users.get(username) == password:
-        return jsonify({"message": f"Bienvenue {username}!"})
+        tokenJWT = create_access_token(identity=username)
+        return jsonify({"message": f"Bienvenue {username}! voici votre token jwt {tokenJWT}"})
     else:
         return jsonify({"error": "Nom d'utilisateur ou mot de passe incorrect."}), 401
 
