@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from  flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 
@@ -23,6 +23,12 @@ users = {
 }
 
 # Route de connexion
+@app.route('/secure-page', methods=['GET'])
+@jwt_required()
+def secure_page():
+    current_user = get_jwt_identity()
+    return jsonify({"msg": f"Bienvenue {current_user}, vous avez accès à cette page sécurisée."})
+
 @app.route("/login", methods=['POST'])
 @jwt_required()
 def login():
